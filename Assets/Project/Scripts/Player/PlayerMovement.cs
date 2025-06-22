@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.Mathematics.Geometry;
+using UnityEngine;
 
 [RequireComponent(
     typeof(Rigidbody2D),
@@ -71,12 +72,14 @@ public sealed class PlayerMovement : MonoBehaviour
     
     public void Move(float direction)
     {
-        _movementInput = direction;
-
-        if(_movementInput != 0f)
+        if(direction != 0f)
         {
+            _movementInput = Mathf.Sign(direction);
             Flip(_movementInput);
+            return;
         }
+        
+        _movementInput = direction;
     }
 
     public void StartJump()
