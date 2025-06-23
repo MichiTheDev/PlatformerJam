@@ -1,12 +1,20 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [RequireComponent(
     typeof(Rigidbody2D),
-    typeof(Animator),
     typeof(Collider2D)
 )]
 public sealed class PlayerMovement : MonoBehaviour
 {
+    public event Action OnJumpStarted;
+    public event Action<bool> OnRunStateChanged;
+    
+    public float HorizontalVelocity => _rb.linearVelocityX;
+    public float VerticalVelocity => _rb.linearVelocityY;
+    
+    public bool IsRunning { get; private set; }
+
     [Header("Movement")]
     [SerializeField] private float _walkSpeed = 3f;
     [SerializeField] private float _runSpeed = 6f;
@@ -24,7 +32,6 @@ public sealed class PlayerMovement : MonoBehaviour
     [SerializeField] private float _groundCheckHeight = 0.05f;
     
     private Rigidbody2D _rb;
-    private Animator _animator;
     private Collider2D _collider;
 
     private float _movementSpeed;
@@ -32,7 +39,6 @@ public sealed class PlayerMovement : MonoBehaviour
     private float _jumpStartY;
     private float _coyoteTimer;
 
-    private bool _isRunning;
     private bool _isJumping;
     private bool _jumpHeld;
     private bool _isGrounded;
@@ -42,7 +48,6 @@ public sealed class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
-        _animator = GetComponent<Animator>();
         _collider = GetComponent<Collider2D>();
     }
 
@@ -58,17 +63,11 @@ public sealed class PlayerMovement : MonoBehaviour
         UpdateJump();
     }
 
-    private void Update()
-    {
-        UpdateAnimations();
-    }
-
     public void SetRunning(bool running)
     {
-        _isRunning = running;
+        IsRunning = running;
         _movementSpeed = running ? _runSpeed : _walkSpeed;
-        
-        _animator.SetBool("IsRunning", _isRunning);
+        OnRunStateChanged?.Invoke(IsRunning);
     }
     
     public void Move(float direction)
@@ -91,9 +90,8 @@ public sealed class PlayerMovement : MonoBehaviour
         _jumpHeld = true;
         _jumpStartY = transform.position.y;
         
-        _animator.SetTrigger("Jump");
-        
         _rb.linearVelocityY = Mathf.Sqrt(2f * _gravity * _maxJumpHeight);
+        OnJumpStarted?.Invoke();
     }
 
     public void StopJump()
@@ -161,12 +159,6 @@ public sealed class PlayerMovement : MonoBehaviour
         }
         
         _isGrounded = true;
-    }
-    
-    private void UpdateAnimations()
-    {
-        _animator.SetFloat("YVelocity", _rb.linearVelocityY);
-        _animator.SetFloat("Speed", Mathf.Abs(_rb.linearVelocityX));
     }
 
     private void Landed()
