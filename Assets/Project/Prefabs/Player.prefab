@@ -66,6 +66,7 @@ MonoBehaviour:
   _minJumpHeight: 1
   _maxJumpHeight: 3.5
   _jumpEndGravityMultiplier: 0.85
+  _coyoteTime: 0.1
   _excludedGroundCheckLayers:
     serializedVersion: 2
     m_Bits: 64

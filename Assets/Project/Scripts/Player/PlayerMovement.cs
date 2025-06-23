@@ -1,5 +1,4 @@
-﻿using Unity.Mathematics.Geometry;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(
     typeof(Rigidbody2D),
@@ -18,6 +17,7 @@ public sealed class PlayerMovement : MonoBehaviour
     [Tooltip("Used to smooth out jump when stop jumping. Set to 0 to disable smoothing. " +
              "Set to 1 to disable Min Jump Height. The lower this value, the closer it will get to Min Jump Height.")]
     [SerializeField, Range(0.01f, 1f)] private float _jumpEndGravityMultiplier = 0.8f;
+    [SerializeField] private float _coyoteTime = 0.1f;
     
     [Header("Ground Check")]
     [SerializeField] private LayerMask _excludedGroundCheckLayers;
@@ -30,6 +30,7 @@ public sealed class PlayerMovement : MonoBehaviour
     private float _movementSpeed;
     private float _movementInput;
     private float _jumpStartY;
+    private float _coyoteTimer;
 
     private bool _isRunning;
     private bool _isJumping;
@@ -52,7 +53,7 @@ public sealed class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        GroundCheck();
+        UpdateGroundCheck();
         UpdateMovement();
         UpdateJump();
     }
@@ -133,7 +134,7 @@ public sealed class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void GroundCheck()
+    private void UpdateGroundCheck()
     {
         Bounds bounds = _collider.bounds;
         Vector2 checkOrigin = new Vector2(bounds.center.x, bounds.center.y - bounds.extents.y);
@@ -144,12 +145,32 @@ public sealed class PlayerMovement : MonoBehaviour
             Vector2.zero, 0f, ~_excludedGroundCheckLayers
         );
 
-        _isGrounded = hit.collider is not null;
+        if(hit.collider is null)
+        {
+            _coyoteTimer += Time.fixedDeltaTime;
+            if(_coyoteTimer >= _coyoteTime)
+            {
+                _isGrounded = false;
+            }
+            return;
+        }
+
+        if(!_isGrounded)
+        {
+            Landed();
+        }
+        
+        _isGrounded = true;
     }
     
     private void UpdateAnimations()
     {
         _animator.SetFloat("YVelocity", _rb.linearVelocityY);
         _animator.SetFloat("Speed", Mathf.Abs(_rb.linearVelocityX));
+    }
+
+    private void Landed()
+    {
+        _coyoteTimer = 0;
     }
 }
