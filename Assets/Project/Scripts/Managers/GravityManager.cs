@@ -3,7 +3,7 @@ using UnityEngine;
 
 public enum GravityDirection
 {
-	Top, Right, Down, Left
+	Top, Down
 }
 
 public sealed class GravityManager : Singleton<GravityManager>
@@ -22,14 +22,8 @@ public sealed class GravityManager : Singleton<GravityManager>
 			case GravityDirection.Top:
 				Physics2D.gravity = new Vector2(0f, -GRAVITY);
 				break;
-			case GravityDirection.Right:
-				Physics2D.gravity = new Vector2(GRAVITY,0f);
-				break;
 			case GravityDirection.Down:
 				Physics2D.gravity = new Vector2(0f, GRAVITY);
-				break;
-			case GravityDirection.Left:
-				Physics2D.gravity = new Vector2(-GRAVITY, 0f);
 				break;
 		}
 		OnGravityDirectionChanged?.Invoke(GravityDirection);

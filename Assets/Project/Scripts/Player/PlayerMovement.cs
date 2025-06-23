@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using UnityEngine;
 
 [RequireComponent(
@@ -15,7 +14,8 @@ public sealed class PlayerMovement : MonoBehaviour
     public float VerticalVelocity => _rb.linearVelocityY;
     
     public bool IsRunning { get; private set; }
-    
+    public bool IsGrounded { get; private set; }
+
     [Header("Movement")]
     [SerializeField] private float _walkSpeed = 3f;
     [SerializeField] private float _runSpeed = 6f;
@@ -42,9 +42,9 @@ public sealed class PlayerMovement : MonoBehaviour
 
     private bool _isJumping;
     private bool _jumpHeld;
-    private bool _isGrounded;
-    
-    private float _gravity => -(Physics2D.gravity.y * _rb.gravityScale);
+
+    private float _gravity => Mathf.Abs(Physics2D.gravity.y * _rb.gravityScale);
+    private float _yDirection => transform.localScale.y;
     
     private void Awake()
     {
@@ -76,7 +76,7 @@ public sealed class PlayerMovement : MonoBehaviour
         if(direction != 0f)
         {
             _movementInput = Mathf.Sign(direction);
-            Flip(_movementInput);
+            FlipX(_movementInput);
             return;
         }
 
@@ -85,13 +85,13 @@ public sealed class PlayerMovement : MonoBehaviour
 
     public void StartJump()
     {
-        if(_isJumping || !_isGrounded) return;
+        if(_isJumping || !IsGrounded) return;
 
         _isJumping = true;
         _jumpHeld = true;
         _jumpStartY = transform.position.y;
         
-        _rb.linearVelocityY = Mathf.Sqrt(2f * _gravity * _maxJumpHeight);
+        _rb.linearVelocityY = Mathf.Sqrt(2f * _gravity * _maxJumpHeight) * _yDirection;
         OnJumpStarted?.Invoke();
     }
 
@@ -102,25 +102,16 @@ public sealed class PlayerMovement : MonoBehaviour
         _jumpHeld = false;
     }
 
-    public void Flip(float direction)
+    public void FlipX(float direction)
     {
         direction = Mathf.Sign(direction);
-        transform.localScale = new Vector3(direction, 1f, 1f);
+        transform.localScale = new Vector3(direction, _yDirection, 1f);
     }
-    
-    public void Rotate(float angle, float duration = 0f)
-    {
-        return;
 
-        IEnumerator RotateRoutine()
-        {
-            float elapsed = 0f;
-            while(elapsed < duration)
-            {
-                
-                yield return null;
-            }
-        }
+    public void FlipY(float direction)
+    {
+        direction = Mathf.Sign(direction);
+        transform.localScale = new Vector3(transform.localScale.x, direction, 1f);
     }
     
     private void UpdateMovement()
@@ -132,26 +123,36 @@ public sealed class PlayerMovement : MonoBehaviour
     {
         if(!_isJumping) return;
 
-        float jumpHeightSinceStart = transform.position.y - _jumpStartY;
+        float jumpHeightSinceStart = transform.position.y - _jumpStartY * _yDirection;
         if(jumpHeightSinceStart >= _minJumpHeight)
         {
             if (!_jumpHeld)
             {
                 _rb.linearVelocityY *= _jumpEndGravityMultiplier;
             }
-
+            
             // If we start to fall, we aren't jumping anymore
-            if(_rb.linearVelocityY <= 0)
+            if(_yDirection > 0)
             {
-                _isJumping = false;
-            } 
+                if(_rb.linearVelocityY <= 0)
+                {
+                    _isJumping = false;
+                } 
+            }
+            else
+            {
+                if(_rb.linearVelocityY >= 0)
+                {
+                    _isJumping = false;
+                } 
+            }
         }
     }
 
     private void UpdateGroundCheck()
     {
         Bounds bounds = _collider.bounds;
-        Vector2 checkOrigin = new Vector2(bounds.center.x, bounds.center.y - bounds.extents.y);
+        Vector2 checkOrigin = new Vector2(bounds.center.x, bounds.center.y - bounds.extents.y * _yDirection);
         Vector2 checkSize = new Vector2(bounds.size.x - 0.05f, _groundCheckHeight);
 
         RaycastHit2D hit = Physics2D.CapsuleCast(
@@ -164,17 +165,17 @@ public sealed class PlayerMovement : MonoBehaviour
             _coyoteTimer += Time.fixedDeltaTime;
             if(_coyoteTimer >= _coyoteTime)
             {
-                _isGrounded = false;
+                IsGrounded = false;
             }
             return;
         }
 
-        if(!_isGrounded)
+        if(!IsGrounded)
         {
             Landed();
         }
         
-        _isGrounded = true;
+        IsGrounded = true;
     }
 
     private void Landed()

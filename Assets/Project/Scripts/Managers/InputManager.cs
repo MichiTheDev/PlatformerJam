@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public sealed class InputManager : Singleton<InputManager>
 {
     public static float InputScale { get; private set; } = 1f;
+    public static bool InputInverted { get; private set; }
     
     private static GameInput _input;
     
@@ -33,8 +34,9 @@ public sealed class InputManager : Singleton<InputManager>
         action.canceled -= context;
     }
 
-    public static void SetInversedInput(bool reversed)
+    public static void SetInputInverted(bool inverted)
     {
-        InputScale = reversed ? -1f : 1f;
+        InputScale = inverted ? -1f : 1f;
+        InputInverted = inverted;
     }
 }

@@ -49,10 +49,28 @@ public sealed class PlayerController : MonoBehaviour
     
     private void TestInput(InputAction.CallbackContext context)
     {
+        if(!context.performed) return;
+
+        if(GravityManager.Instance.GravityDirection == GravityDirection.Down)
+        {
+            GravityManager.Instance.ChangeGravity(GravityDirection.Top);
+        }
+        else if(GravityManager.Instance.GravityDirection == GravityDirection.Top)
+        {
+            GravityManager.Instance.ChangeGravity(GravityDirection.Down);
+        }
     }
     
     private void OnGravityDirectionChanged(GravityDirection gravityDirection)
     {
-        //TODO: rotate player depending on direction
+        switch(gravityDirection)
+        {
+            case GravityDirection.Top:
+                _playerMovement.FlipY(-1f);
+                break;
+            case GravityDirection.Down:
+                _playerMovement.FlipY(1f);
+                break;
+        }
     }
 }
