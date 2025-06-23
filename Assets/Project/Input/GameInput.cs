@@ -55,9 +55,18 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Test"",
+                    ""name"": ""TestGravity"",
                     ""type"": ""Button"",
                     ""id"": ""760b25cf-840e-41e6-a894-5f1cd3f8dcfa"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""TestInput"",
+                    ""type"": ""Button"",
+                    ""id"": ""0ebc936f-4c89-425e-9280-e5334765684e"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -182,7 +191,18 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Test"",
+                    ""action"": ""TestGravity"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e4082905-e4cc-473d-8f2b-aba2eeefa757"",
+                    ""path"": ""<Keyboard>/o"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TestInput"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -773,7 +793,8 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Run = m_Player.FindAction("Run", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_Test = m_Player.FindAction("Test", throwIfNotFound: true);
+        m_Player_TestGravity = m_Player.FindAction("TestGravity", throwIfNotFound: true);
+        m_Player_TestInput = m_Player.FindAction("TestInput", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -856,7 +877,8 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Run;
     private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_Test;
+    private readonly InputAction m_Player_TestGravity;
+    private readonly InputAction m_Player_TestInput;
     public struct PlayerActions
     {
         private @GameInput m_Wrapper;
@@ -864,7 +886,8 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Run => m_Wrapper.m_Player_Run;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @Test => m_Wrapper.m_Player_Test;
+        public InputAction @TestGravity => m_Wrapper.m_Player_TestGravity;
+        public InputAction @TestInput => m_Wrapper.m_Player_TestInput;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -883,9 +906,12 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
-            @Test.started += instance.OnTest;
-            @Test.performed += instance.OnTest;
-            @Test.canceled += instance.OnTest;
+            @TestGravity.started += instance.OnTestGravity;
+            @TestGravity.performed += instance.OnTestGravity;
+            @TestGravity.canceled += instance.OnTestGravity;
+            @TestInput.started += instance.OnTestInput;
+            @TestInput.performed += instance.OnTestInput;
+            @TestInput.canceled += instance.OnTestInput;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -899,9 +925,12 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
-            @Test.started -= instance.OnTest;
-            @Test.performed -= instance.OnTest;
-            @Test.canceled -= instance.OnTest;
+            @TestGravity.started -= instance.OnTestGravity;
+            @TestGravity.performed -= instance.OnTestGravity;
+            @TestGravity.canceled -= instance.OnTestGravity;
+            @TestInput.started -= instance.OnTestInput;
+            @TestInput.performed -= instance.OnTestInput;
+            @TestInput.canceled -= instance.OnTestInput;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1087,7 +1116,8 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
-        void OnTest(InputAction.CallbackContext context);
+        void OnTestGravity(InputAction.CallbackContext context);
+        void OnTestInput(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

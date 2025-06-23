@@ -16,7 +16,8 @@ public sealed class PlayerController : MonoBehaviour
         InputManager.Register("Movement", MovementInput);
         InputManager.Register("Run", RunInput);
         InputManager.Register("Jump", JumpInput);
-        InputManager.Register("Test", TestInput);
+        InputManager.Register("TestGravity", TestInputGravity);
+        InputManager.Register("TestInput", TestInput);
         
         GravityManager.Instance.OnGravityDirectionChanged += OnGravityDirectionChanged;
     }
@@ -26,7 +27,8 @@ public sealed class PlayerController : MonoBehaviour
         InputManager.Unregister("Movement", MovementInput);
         InputManager.Unregister("Run", RunInput);
         InputManager.Unregister("Jump", JumpInput);
-        InputManager.Unregister("Test", TestInput);
+        InputManager.Unregister("TestGravity", TestInputGravity);
+        InputManager.Unregister("TestInput", TestInput);
         
         GravityManager.Instance.OnGravityDirectionChanged -= OnGravityDirectionChanged;
     }
@@ -47,7 +49,7 @@ public sealed class PlayerController : MonoBehaviour
         else if(context.canceled) _playerMovement.StopJump();
     }
     
-    private void TestInput(InputAction.CallbackContext context)
+    private void TestInputGravity(InputAction.CallbackContext context)
     {
         if(!context.performed) return;
 
@@ -59,6 +61,13 @@ public sealed class PlayerController : MonoBehaviour
         {
             GravityManager.Instance.ChangeGravity(GravityDirection.Down);
         }
+    }
+    
+    private void TestInput(InputAction.CallbackContext context)
+    {
+        if(!context.performed) return;
+
+        InputManager.SetInputInverted(!InputManager.InputInverted);
     }
     
     private void OnGravityDirectionChanged(GravityDirection gravityDirection)

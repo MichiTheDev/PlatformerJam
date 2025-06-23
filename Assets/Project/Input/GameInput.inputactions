@@ -33,9 +33,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Test",
+                    "name": "TestGravity",
                     "type": "Button",
                     "id": "760b25cf-840e-41e6-a894-5f1cd3f8dcfa",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "TestInput",
+                    "type": "Button",
+                    "id": "0ebc936f-4c89-425e-9280-e5334765684e",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -160,7 +169,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Test",
+                    "action": "TestGravity",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e4082905-e4cc-473d-8f2b-aba2eeefa757",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TestInput",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
