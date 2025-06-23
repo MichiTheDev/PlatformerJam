@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 public sealed class InputManager : MonoBehaviour
 {
     public static InputManager Instance { get; private set; }
+    public static float InputScale { get; private set; } = 1f;
     
     private static GameInput _input;
     
@@ -37,5 +38,10 @@ public sealed class InputManager : MonoBehaviour
 
         action.performed -= context;
         action.canceled -= context;
+    }
+
+    public static void SetInversedInput(bool reversed)
+    {
+        InputScale = reversed ? -1f : 1f;
     }
 }

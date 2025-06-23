@@ -14,7 +14,7 @@ public sealed class PlayerMovement : MonoBehaviour
     public float VerticalVelocity => _rb.linearVelocityY;
     
     public bool IsRunning { get; private set; }
-
+    
     [Header("Movement")]
     [SerializeField] private float _walkSpeed = 3f;
     [SerializeField] private float _runSpeed = 6f;
@@ -74,12 +74,12 @@ public sealed class PlayerMovement : MonoBehaviour
     {
         if(direction != 0f)
         {
-            _movementInput = Mathf.Sign(direction);
+            _movementInput = Mathf.Sign(direction) * InputManager.InputScale;
             Flip(_movementInput);
             return;
         }
-        
-        _movementInput = direction;
+
+        _movementInput = 0f;
     }
 
     public void StartJump()
