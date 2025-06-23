@@ -6,6 +6,8 @@ public sealed class PlayerController : MonoBehaviour
 {
     private PlayerMovement _playerMovement;
 
+    private float _movementInput;
+
     private void Awake()
     {
         _playerMovement = GetComponent<PlayerMovement>();
@@ -19,6 +21,8 @@ public sealed class PlayerController : MonoBehaviour
         InputManager.Register("TestGravity", TestInputGravity);
         InputManager.Register("TestInput", TestInput);
         
+        InputManager.OnInputInverted += OnInputInvertChanged;
+        
         GravityManager.Instance.OnGravityDirectionChanged += OnGravityDirectionChanged;
     }
 
@@ -30,12 +34,15 @@ public sealed class PlayerController : MonoBehaviour
         InputManager.Unregister("TestGravity", TestInputGravity);
         InputManager.Unregister("TestInput", TestInput);
         
+        InputManager.OnInputInverted -= OnInputInvertChanged;
+        
         GravityManager.Instance.OnGravityDirectionChanged -= OnGravityDirectionChanged;
     }
 
     private void MovementInput(InputAction.CallbackContext context)
     {
-        _playerMovement.Move(context.ReadValue<float>() * InputManager.InputScale);
+        _movementInput = context.ReadValue<float>();
+        _playerMovement.Move(_movementInput * InputManager.InputScale);
     }
 
     private void RunInput(InputAction.CallbackContext context)
@@ -68,6 +75,11 @@ public sealed class PlayerController : MonoBehaviour
         if(!context.performed) return;
 
         InputManager.SetInputInverted(!InputManager.InputInverted);
+    }
+    
+    private void OnInputInvertChanged(bool inverted)
+    {
+        _playerMovement.Move(_movementInput * InputManager.InputScale);
     }
     
     private void OnGravityDirectionChanged(GravityDirection gravityDirection)

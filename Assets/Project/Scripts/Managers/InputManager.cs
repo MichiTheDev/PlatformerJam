@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public sealed class InputManager : Singleton<InputManager>
 {
+    public static event Action<bool> OnInputInverted;
+    
     public static float InputScale { get; private set; } = 1f;
     public static bool InputInverted { get; private set; }
     
@@ -38,5 +40,6 @@ public sealed class InputManager : Singleton<InputManager>
     {
         InputScale = inverted ? -1f : 1f;
         InputInverted = inverted;
+        OnInputInverted?.Invoke(inverted);
     }
 }
