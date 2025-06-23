@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerMovement))]
 public sealed class PlayerController : MonoBehaviour
 {
+    [SerializeField] private GravityDirection _gravityDirection;
+    
     private PlayerMovement _playerMovement;
 
     private void Awake()
@@ -16,6 +18,9 @@ public sealed class PlayerController : MonoBehaviour
         InputManager.Register("Movement", MovementInput);
         InputManager.Register("Run", RunInput);
         InputManager.Register("Jump", JumpInput);
+        InputManager.Register("Test", TestInput);
+        
+        GravityManager.Instance.OnGravityDirectionChanged += OnGravityDirectionChanged;
     }
 
     private void OnDisable()
@@ -23,11 +28,14 @@ public sealed class PlayerController : MonoBehaviour
         InputManager.Unregister("Movement", MovementInput);
         InputManager.Unregister("Run", RunInput);
         InputManager.Unregister("Jump", JumpInput);
+        InputManager.Unregister("Test", TestInput);
+        
+        GravityManager.Instance.OnGravityDirectionChanged -= OnGravityDirectionChanged;
     }
 
     private void MovementInput(InputAction.CallbackContext context)
     {
-        _playerMovement.Move(context.ReadValue<float>());
+        _playerMovement.Move(context.ReadValue<float>() * InputManager.InputScale);
     }
 
     private void RunInput(InputAction.CallbackContext context)
@@ -39,5 +47,15 @@ public sealed class PlayerController : MonoBehaviour
     {
         if(context.performed) _playerMovement.StartJump();
         else if(context.canceled) _playerMovement.StopJump();
+    }
+    
+    private void TestInput(InputAction.CallbackContext context)
+    {
+        GravityManager.Instance.ChangeGravity(_gravityDirection);
+    }
+    
+    private void OnGravityDirectionChanged(GravityDirection gravityDirection)
+    {
+        //TODO: rotate player depending on direction
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(
@@ -33,7 +34,7 @@ public sealed class PlayerMovement : MonoBehaviour
     
     private Rigidbody2D _rb;
     private Collider2D _collider;
-
+    
     private float _movementSpeed;
     private float _movementInput;
     private float _jumpStartY;
@@ -74,7 +75,7 @@ public sealed class PlayerMovement : MonoBehaviour
     {
         if(direction != 0f)
         {
-            _movementInput = Mathf.Sign(direction) * InputManager.InputScale;
+            _movementInput = Mathf.Sign(direction);
             Flip(_movementInput);
             return;
         }
@@ -106,7 +107,22 @@ public sealed class PlayerMovement : MonoBehaviour
         direction = Mathf.Sign(direction);
         transform.localScale = new Vector3(direction, 1f, 1f);
     }
+    
+    public void Rotate(float angle, float duration = 0f)
+    {
+        return;
 
+        IEnumerator RotateRoutine()
+        {
+            float elapsed = 0f;
+            while(elapsed < duration)
+            {
+                
+                yield return null;
+            }
+        }
+    }
+    
     private void UpdateMovement()
     {
         _rb.linearVelocityX = _movementInput * _movementSpeed;

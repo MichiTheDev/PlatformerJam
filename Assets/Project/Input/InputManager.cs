@@ -1,22 +1,15 @@
 ﻿using System;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
-public sealed class InputManager : MonoBehaviour
+public sealed class InputManager : Singleton<InputManager>
 {
-    public static InputManager Instance { get; private set; }
     public static float InputScale { get; private set; } = 1f;
     
     private static GameInput _input;
     
-    private void Awake()
+    protected override void Awake()
     {
-        if(Instance is not null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        base.Awake();
         _input = new GameInput();
         _input.Enable();
     }
