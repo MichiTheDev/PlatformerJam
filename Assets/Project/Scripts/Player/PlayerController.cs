@@ -4,8 +4,6 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerMovement))]
 public sealed class PlayerController : MonoBehaviour
 {
-    [SerializeField] private GravityDirection _gravityDirection;
-    
     private PlayerMovement _playerMovement;
 
     private void Awake()
@@ -51,7 +49,6 @@ public sealed class PlayerController : MonoBehaviour
     
     private void TestInput(InputAction.CallbackContext context)
     {
-        GravityManager.Instance.ChangeGravity(_gravityDirection);
     }
     
     private void OnGravityDirectionChanged(GravityDirection gravityDirection)
