@@ -97,8 +97,6 @@ public sealed class PlayerMovement : MonoBehaviour
 
     public void StopJump()
     {
-        if(!_isJumping || !_jumpHeld) return;
-
         _jumpHeld = false;
     }
 
@@ -178,6 +176,7 @@ public sealed class PlayerMovement : MonoBehaviour
 
     private void Landed()
     {
+        _isJumping = false;
         _coyoteTimer = 0;
     }
 }
