@@ -72,6 +72,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   _groundCheckHeight: 0.05
+  _obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  _obstacleCheckDistance: 0.1
+  _obstacleCheckHeight: 0.6
 --- !u!114 &-590389703752741911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,6 +89,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fb7315ed09c49b09ae984072b1a1e01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _pushRunAnimationSpeed: 1.5
+  _pushAnimationColliderOffset: {x: 0.035, y: -0.06}
+  _pushAnimationColliderSize: {x: 0.915, y: 1.22}
 --- !u!50 &2565229383091609142
 Rigidbody2D:
   serializedVersion: 5
@@ -222,7 +230,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.061969936, y: -0.06}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -232,5 +240,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.425, y: 1.35}
+  m_Size: {x: 0.72106016, y: 1.22}
   m_EdgeRadius: 0
