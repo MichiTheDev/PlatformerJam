@@ -87,10 +87,10 @@ public sealed class PlayerController : MonoBehaviour
         switch(gravityDirection)
         {
             case GravityDirection.Top:
-                _playerMovement.FlipY(-1f);
+                _playerMovement.FlipY(true);
                 break;
             case GravityDirection.Down:
-                _playerMovement.FlipY(1f);
+                _playerMovement.FlipY(false);
                 break;
         }
     }

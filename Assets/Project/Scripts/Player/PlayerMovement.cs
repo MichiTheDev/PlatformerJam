@@ -76,7 +76,7 @@ public sealed class PlayerMovement : MonoBehaviour
         if(direction != 0f)
         {
             _movementInput = Mathf.Sign(direction);
-            FlipX(_movementInput);
+            FlipX(_movementInput < 0);
             return;
         }
 
@@ -102,16 +102,14 @@ public sealed class PlayerMovement : MonoBehaviour
         _jumpHeld = false;
     }
 
-    public void FlipX(float direction)
+    public void FlipX(bool flip)
     {
-        direction = Mathf.Sign(direction);
-        transform.localScale = new Vector3(direction, _yDirection, 1f);
+        transform.localScale = new Vector3(flip ? -1f : 1f, transform.localScale.y, 1f);
     }
 
-    public void FlipY(float direction)
+    public void FlipY(bool flip)
     {
-        direction = Mathf.Sign(direction);
-        transform.localScale = new Vector3(transform.localScale.x, direction, 1f);
+        transform.localScale = new Vector3(transform.localScale.x, flip ? -1f : 1f, 1f);
     }
     
     private void UpdateMovement()
