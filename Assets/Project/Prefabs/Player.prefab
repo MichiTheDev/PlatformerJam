@@ -62,8 +62,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 965b0d5da5a94f63ac6e5a1cfc9d038c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _walkSpeed: 4
-  _runSpeed: 7
+  _walkSpeed: 3
+  _runSpeed: 6
   _minJumpHeight: 1
   _maxJumpHeight: 3.5
   _jumpEndGravityMultiplier: 0.85
@@ -71,7 +71,7 @@ MonoBehaviour:
   _excludedGroundCheckLayers:
     serializedVersion: 2
     m_Bits: 64
-  _groundCheckHeight: 0.05
+  _groundCheckHeight: 0.075
   _obstacleLayer:
     serializedVersion: 2
     m_Bits: 128
@@ -90,8 +90,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _pushRunAnimationSpeed: 1.5
-  _pushAnimationColliderOffset: {x: 0.035, y: -0.06}
-  _pushAnimationColliderSize: {x: 0.915, y: 1.22}
+  _pushAnimationColliderOffset: {x: 0, y: -0.08386958}
+  _pushAnimationColliderSize: {x: 1, y: 1.008667}
 --- !u!50 &2565229383091609142
 Rigidbody2D:
   serializedVersion: 5
@@ -163,7 +163,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 2069204794, guid: b8ad6af9710f84746af4117a5e08cc66, type: 3}
+  m_Sprite: {fileID: 278768936, guid: 534fe3093f4e9744f8a0596585a21d4b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -230,7 +230,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.061969936, y: -0.06}
+  m_Offset: {x: -0.06350604, y: -0.10639879}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -240,5 +240,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.72106016, y: 1.22}
+  m_Size: {x: 0.54664165, y: 1.2098165}
   m_EdgeRadius: 0
